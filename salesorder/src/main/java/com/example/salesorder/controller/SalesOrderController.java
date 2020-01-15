@@ -44,24 +44,6 @@ public class SalesOrderController {
 
     @GetMapping(value = "orderDetailsByEmail/{email}", produces = "application/json")
     public List<SalesOrderWithLineItems> getOrderDetailsByEmail(@PathVariable String email) {
+        return salesOrderService.getOrderDetailsByEmail(email);}
 
-        LOG.log(Level.INFO, "You reached order by email method");
-        HashMap<String, Integer> hmap = new HashMap<>();
-        List<HashMap<String, Integer>> finalList = new ArrayList<>();
-        List<SalesOrder> orderIdIs = this.salesOrderService.getOrderIdByEmail(email);
-        System.out.println("------orderIdIs---------" + orderIdIs);
-
-        System.out.println("---Calling salesorder Service with orderId");
-        List<SalesOrderWithLineItems> salesOrderWithLineItems= new ArrayList<>();
-
-        for (SalesOrder salesOrder : orderIdIs) {
-            SalesOrderWithLineItems salesOrderWithLineItems1 = new SalesOrderWithLineItems();
-            salesOrderWithLineItems1.setSalesOrder(salesOrder);
-            salesOrderWithLineItems1.setOrderLineItem(this.orderLineItemService.getOrdersById(salesOrder.getId()));
-            salesOrderWithLineItems.add(salesOrderWithLineItems1);
-            /*hmap = (HashMap<String, Integer>) this.orderLineItemService.getOrdersById(salesOrder.getId());
-            finalList.add(hmap);*/
-        }
-        return salesOrderWithLineItems;
-    }
 }

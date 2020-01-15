@@ -19,11 +19,13 @@ public class SalesOrderService {
     private CustomerService customerService;
     private ItemService itemService;
 
+
     public SalesOrderService(SalesOrderRepository salesOrderRepository, OrderLineItemService orderLineItemService, CustomerService customerService, ItemService itemService) {
         this.salesOrderRepository = salesOrderRepository;
         this.orderLineItemService = orderLineItemService;
         this.customerService = customerService;
         this.itemService = itemService;
+
     }
 
     public SalesOrder add(Date Date, String Email, String Description, Double Price) {
@@ -140,4 +142,23 @@ public class SalesOrderService {
         return result;
     }
 
-}
+    public List<SalesOrderWithLineItems> getOrderDetailsByEmail(String email) {
+        HashMap<String, Integer> hmap = new HashMap<>();
+        List<HashMap<String, Integer>> finalList = new ArrayList<>();
+        List<SalesOrder> orderIdIs = getOrderIdByEmail(email);
+        System.out.println("------orderIdIs---------" + orderIdIs);
+
+        System.out.println("---Calling salesorder Service with orderId");
+        List<SalesOrderWithLineItems> salesOrderWithLineItems= new ArrayList<>();
+
+        for (SalesOrder salesOrder : orderIdIs) {
+            SalesOrderWithLineItems salesOrderWithLineItems1 = new SalesOrderWithLineItems();
+            salesOrderWithLineItems1.setSalesOrder(salesOrder);
+            salesOrderWithLineItems1.setOrderLineItem(this.orderLineItemService.getOrdersById(salesOrder.getId()));
+            salesOrderWithLineItems.add(salesOrderWithLineItems1);
+            /*hmap = (HashMap<String, Integer>) this.orderLineItemService.getOrdersById(salesOrder.getId());
+            finalList.add(hmap);*/
+        }
+        return salesOrderWithLineItems;
+    }
+    }
