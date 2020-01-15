@@ -43,7 +43,7 @@ public class SalesOrderController {
     public String createOrder(@RequestBody OrderDetails orderDetails) {return salesOrderService.createOrder(orderDetails);}
 
     @GetMapping(value = "orderDetailsByEmail/{email}", produces = "application/json")
-    public List<HashMap<String, Integer>> getOrderDetailsByEmail(@PathVariable String email) {
+    public List<SalesOrderWithLineItems> getOrderDetailsByEmail(@PathVariable String email) {
 
         LOG.log(Level.INFO, "You reached order by email method");
         HashMap<String, Integer> hmap = new HashMap<>();
@@ -52,11 +52,16 @@ public class SalesOrderController {
         System.out.println("------orderIdIs---------" + orderIdIs);
 
         System.out.println("---Calling salesorder Service with orderId");
+        List<SalesOrderWithLineItems> salesOrderWithLineItems= new ArrayList<>();
 
         for (SalesOrder salesOrder : orderIdIs) {
-            hmap = (HashMap<String, Integer>) this.orderLineItemService.getOrdersById(salesOrder.getId());
-            finalList.add(hmap);
+            SalesOrderWithLineItems salesOrderWithLineItems1 = new SalesOrderWithLineItems();
+            salesOrderWithLineItems1.setSalesOrder(salesOrder);
+            salesOrderWithLineItems1.setOrderLineItem(this.orderLineItemService.getOrdersById(salesOrder.getId()));
+            salesOrderWithLineItems.add(salesOrderWithLineItems1);
+            /*hmap = (HashMap<String, Integer>) this.orderLineItemService.getOrdersById(salesOrder.getId());
+            finalList.add(hmap);*/
         }
-        return finalList;
+        return salesOrderWithLineItems;
     }
 }
