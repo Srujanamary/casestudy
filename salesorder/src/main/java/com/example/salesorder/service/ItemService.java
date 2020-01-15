@@ -16,7 +16,7 @@ public class ItemService {
 
     @HystrixCommand(fallbackMethod = "defaultItemService")
     public Item get(String item) {
-        return this.itemServiceProxy.getItemByName(item);
+        return this.itemServiceProxy.getItemByName(item).get(0);
     }
 
     private Item defaultItemService(String item){

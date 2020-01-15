@@ -1,10 +1,13 @@
 package com.example.salesorder.service;
 
 
-import com.example.salesorder.model.Customer;
+import com.example.customer.model.Customer;
+import com.example.customer.model.CustomerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
+import java.util.List;
 
 @Service
 public class CustomerService {
@@ -15,13 +18,16 @@ public class CustomerService {
     }
 
     @HystrixCommand(fallbackMethod="defaultCustomerService")
-     public Customer getCustomerByEmail(String email){
+     public CustomerDTO getCustomerByEmail(String email){
         System.out.println("Inside the customer service---------");
-        return customerServiceProxy.getCustomerByEmail(email);
+        List<CustomerDTO> customer = customerServiceProxy.getCustomerByEmail(email);
+        System.out.println("Inside the customer service---------");
+
+        return customer.get(0);
     }
 
-     private Customer defaultCustomerService(String email){
-        Customer customer=new Customer();
+     private CustomerDTO defaultCustomerService(String email){
+         CustomerDTO customer=new CustomerDTO();
         System.out.println("Came to default method");
         customer.setEmail(email);
         customer.setId(-1L);

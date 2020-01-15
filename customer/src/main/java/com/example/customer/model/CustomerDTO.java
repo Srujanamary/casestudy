@@ -1,18 +1,11 @@
 package com.example.customer.model;
 
-import lombok.RequiredArgsConstructor;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-import javax.persistence.*;
-import java.util.Objects;
+public class CustomerDTO {
 
-@Entity(name="Customer")
-@Table(name="customer")
-public class Customer {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String firstName;
     private String lastName;
 
